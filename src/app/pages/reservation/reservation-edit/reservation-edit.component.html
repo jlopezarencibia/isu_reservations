@@ -1,0 +1,61 @@
+<div class="row m-0 bg-white justify-content-center">
+  <div class="col col-11 col-md-8">
+    <div class="row py-3 align-items-stretch">
+      <div class="col col-md-4 pl-0">
+        <span class="page-title" style="font-weight: lighter;">{{pageTitle}}</span>
+      </div>
+      <div class="col col-md-8 text-muted small">
+        {{pageDescription}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row bg-gray justify-content-center p-3">
+  <div class="col-md-8 bg-white mb-3">
+    <div class="flex-gap">
+      <div class="input-group input-control flex-grow-1">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <fa-icon [icon]="icName"></fa-icon>
+          </div>
+        </div>
+        <input type="text" class="form-control input-control" placeholder="Contact name ..." aria-label="Username"
+               aria-describedby="basic-addon1">
+      </div>
+      <div ngbDropdown class="d-inline-block flex-grow-1">
+        <button class="btn input-dropdown d-flex align-items-center" id="dropdownBasic1"
+                ngbDropdownToggle>
+          <fa-icon [icon]="icType" class="mr-2"></fa-icon>
+          <span>Contact type</span></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem>By Date Ascending</button>
+          <button ngbDropdownItem>By Date Descending</button>
+          <button ngbDropdownItem>By Alphabetic Ascending</button>
+          <button ngbDropdownItem>By Alphabetic Descending</button>
+          <button ngbDropdownItem>By Ranking</button>
+        </div>
+      </div>
+      <div class="input-group input-control flex-grow-1">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <fa-icon [icon]="icPhone"></fa-icon>
+          </div>
+        </div>
+        <input type="text" class="form-control" placeholder="Phone:" aria-label="Username"
+               aria-describedby="basic-addon1">
+      </div>
+      <div ngbDropdown class="d-inline-block flex-shrink-1">
+        <button class="btn input-dropdown d-flex align-items-center" id="dropdownBasic2"
+                ngbDropdownToggle>
+          <fa-icon class="mr-2" [icon]="icDate"></fa-icon>
+          <span>Birth date</span></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+          <button ngbDropdownItem>By Alphabetic Descending</button>
+          <button ngbDropdownItem>By Ranking</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

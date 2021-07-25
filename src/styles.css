@@ -1,1 +1,160 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+:root {
+  --gray-bg: #eeeff0;
+  --primary-gray: #9e9fa0;
+  --primary-red: #ef0000;
+  --odd-gray: #f6f7f8;
+  --even-gray: #eaebec;
+  --text-gray: #4c4d4e;
+}
+
+body {
+  color: var(--text-gray);
+}
+
+.banner {
+  background-image: url("assets/img/banner-back.jpg");
+  object-fit: cover;
+}
+
+.siteName {
+  font-size: 4em;
+}
+
+.siteSlogan {
+  font-size: 1.2em;
+  line-height: 1em;
+  font-weight: lighter;
+}
+
+.page-title {
+  color: var(--primary-red);
+  font-size: x-large;
+  font-weight: lighter;
+}
+
+.bg-gray {
+  background-color: var(--gray-bg);
+}
+
+.btn-gray {
+  transition: .2s;
+  border-radius: 0;
+  background-color: var(--primary-gray);
+  color: white;
+  font-size: small;
+  text-transform: uppercase;
+}
+
+.btn-gray:hover {
+  transition: .2s;
+  background-color: #9E9FA0dd;
+  color: white;
+}
+
+.btn-gray:active {
+  transition: .2s;
+  background-color: #9E9FA0aa;
+  color: white;
+}
+
+.btn-favorite-active span {
+  opacity: .5;
+}
+
+.btn-favorite-active fa-icon {
+  color: red;
+  opacity: 1;
+}
+
+.btn-banner {
+  color: white;
+  border-radius: 0;
+  padding: 0.25em 0.20em;
+}
+
+.btn-banner:hover {
+  background-color: #ffffff22;
+  color: white;
+}
+
+.btn-banner:active {
+  background-color: #ffffff11;
+  color: white;
+}
+
+
+@media (max-width: 576px) {
+  .mobile-hidden {
+    display: none !important;
+  }
+
+  .siteName {
+    font-size: 1.5em;
+  }
+
+  .isu {
+    font-size: 3em;
+  }
+}
+
+@media (min-width: 576px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+.flex-gap {
+  display: flex;
+}
+
+.flex-gap > div {
+  margin: .5rem;
+}
+
+.input-dropdown {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--primary-gray);
+  border-radius: 0;
+  color: var(--primary-gray);
+}
+
+.input-dropdown > fa-icon {
+  color: var(--primary-gray);
+}
+
+.input-control > input {
+  border-radius: 0;
+  border-top: 1px solid var(--primary-gray);
+  border-left: 0;
+  color: var(--primary-gray);
+  border-bottom: 1px solid var(--primary-gray);
+  border-right: 1px solid var(--primary-gray);
+}
+
+.input-group-text {
+  background-color: white;
+  border-radius: 0;
+  color: var(--primary-gray);
+  border-top: 1px solid var(--primary-gray);
+  border-right: 0;
+  border-bottom: 1px solid var(--primary-gray);
+  border-left: 1px solid var(--primary-gray);
+}
+
+.dropdown-menu {
+    padding: .5em;
+}
+
+button.dropdown-item {
+    border-radius: 5px;
+    padding: 0.15rem 1rem;
+    color: var(--primary-gray);
+}
+
+button.dropdown-item:hover {
+    background-color: var(--primary-gray);
+    color: white;
+}

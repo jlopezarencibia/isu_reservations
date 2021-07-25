@@ -1,0 +1,26 @@
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color:  var(--odd-gray);
+}
+.table-striped tbody tr:nth-of-type(even) {
+  background-color:  var(--even-gray);
+}
+
+table {
+  color: var(--text-gray);
+}
+
+tr {
+  border-top: 3px solid white;
+}
+
+.table td {
+  vertical-align:  middle;
+}
+
+.star {
+    font-size: 1rem;
+    color: #999999;
+}
+.filled {
+    color: #EED430;
+}

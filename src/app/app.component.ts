@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import {faCaretLeft, faCaretRight} from "@fortawesome/free-solid-svg-icons";
+import {ActivatedRoute} from "@angular/router";
+import {AppService} from "./services/app.service";
+import {Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +10,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'reservations';
+
+  // ICONS
+  icRight = faCaretRight;
+  icLeft = faCaretLeft;
+
+  path: Observable<string>;
+
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly appService: AppService
+  ) {
+    this.path = appService.path;
+  }
 }
