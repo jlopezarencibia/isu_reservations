@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {Reservation} from "../api/model/reservation";
 import * as moment from "moment";
+import {Reservation} from "../api/models/reservation";
+import {AngularEditorConfig} from "@kolkov/angular-editor";
+import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
+import {parse} from "@fortawesome/fontawesome-svg-core";
 
 @Injectable({
     providedIn: 'root'
@@ -20,15 +23,120 @@ export class AppService {
 
     generateDummyReservations(): Reservation[] {
         const reservations: Reservation[] = [];
-        reservations.push(new Reservation('Second Dock', moment('May 17 2021 9:00 pm', 'MMM DD YYYY h:mm a').toString(), 4, true, '', 0));
-        reservations.push(new Reservation('Primer Puerto', moment('May 18 2021 8:00 pm', 'MMM DD YYYY h:mm a').toString(), 3, false, '', 1));
-        reservations.push(new Reservation('Stella', moment('May 20 2021 7:00 pm', 'MMM DD YYYY h:mm a').toString(), 2, false, '', 2));
-        reservations.push(new Reservation('Island Creek', moment('May 21 2021 8:00 pm', 'MMM DD YYYY h:mm a').toString(), 2, false, '', 3));
-        reservations.push(new Reservation('Fogo the Chao', moment('May 17 2021 9:00 pm', 'MMM DD YYYY h:mm a').toString(), 2, true, '', 4));
-        reservations.push(new Reservation('Fontana', moment('May 23 2021 8:00 pm', 'MMM DD YYYY h:mm a').toString(), 2, false, '', 5));
-        reservations.push(new Reservation('Island Creek', moment('May 24 2021 9:00 pm', 'MMM DD YYYY h:mm a').toString(), 1, true, '', 6));
-        reservations.push(new Reservation('Fogo de Chao', moment('May 25 2021 8:00 pm', 'MMM DD YYYY h:mm a').toString(), 0, false, '', 7));
+        reservations.push({
+            location: 'Second Dock',
+            date: moment('May 17 2021 9:00 pm', 'MMM DD YYYY h:mm a').toString(),
+            ranking: 4,
+            favorite: true
+        });
         return reservations;
+    }
+
+    getEditorConfig(): AngularEditorConfig {
+        return {
+            editable: true,
+            spellcheck: true,
+            height: 'auto',
+            minHeight: '200px',
+            maxHeight: 'auto',
+            width: 'auto',
+            minWidth: '0',
+            translate: 'yes',
+            enableToolbar: true,
+            showToolbar: true,
+            placeholder: 'Enter text here...',
+            defaultParagraphSeparator: '',
+            defaultFontName: '',
+            defaultFontSize: '',
+            fonts: [
+                {class: 'arial', name: 'Arial'},
+                {class: 'times-new-roman', name: 'Times New Roman'},
+                {class: 'calibri', name: 'Calibri'},
+                {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+            ],
+            // customClasses: [
+            //     {
+            //         name: 'quote',
+            //         class: 'quote',
+            //     },
+            //     {
+            //         name: 'redText',
+            //         class: 'redText'
+            //     },
+            //     {
+            //         name: 'titleText',
+            //         class: 'titleText',
+            //         tag: 'h1',
+            //     },
+            // ],
+            // uploadUrl: 'api/image',
+            // upload: (file: File) => { ... }
+            uploadWithCredentials: false,
+            sanitize: true,
+            toolbarPosition: 'top',
+            toolbarHiddenButtons: [
+                [
+                    'heading',
+                    // 'undo',
+                    // 'redo',
+                    // 'bold',
+                    // 'italic',
+                    // 'underline',
+                    'strikeThrough',
+                    'subscript',
+                    'superscript',
+                    // 'justifyLeft',
+                    // 'justifyCenter',
+                    // 'justifyRight',
+                    // 'justifyFull',
+                    'indent',
+                    'outdent',
+                    // 'insertUnorderedList',
+                    // 'insertOrderedList',
+                    'heading',
+                    'fontName'
+                ],
+                [
+                    'fontSize',
+                    'textColor',
+                    'backgroundColor',
+                    'customClasses',
+                    // 'link',
+                    // 'unlink',
+                    // 'insertImage',
+                    'insertVideo',
+                    // 'insertHorizontalRule',
+                    'removeFormat',
+                    // 'toggleEditorMode'
+                ]
+            ]
+        }
+    }
+
+    getNgbDate(dateInMilis: string) {
+        const date = moment(dateInMilis, 'x');
+        const year: number = parseInt(date.format('YYYY'));
+        const month: number = parseInt(date.format('MM'));
+        const day: number = parseInt(date.format('DD'));
+        return {year, month, day};
+    }
+
+    getDateInMilis(ngbDate: NgbDateStruct): string {
+        return moment((ngbDate.year + '-' + ngbDate.month + '-' + ngbDate.day), 'YYYY-MM-DD').format('x');
+    }
+
+    getDateTimeInMilis(date: NgbDateStruct, time: NgbTimeStruct): string {
+        console.log(date);
+        console.log(time);
+        return moment((date.year + '-' + date.month + '-' + date.day + ' ' + time.hour + ':' + time.minute), 'YYY-MM-DD HH:mm').format('x')
+    }
+
+    getNgbTime(dateInMilis: string): NgbTimeStruct {
+        const date = moment(dateInMilis, 'xx');
+        const hour = parseInt(date.format('HH'));
+        const minute = parseInt(date.format('MM'));
+        const second = 0;
+        return {hour, minute, second}
     }
 
 }

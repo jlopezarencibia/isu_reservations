@@ -1,147 +1,207 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
 :root {
-  --gray-bg: #eeeff0;
-  --primary-gray: #9e9fa0;
-  --primary-red: #ef0000;
-  --odd-gray: #f6f7f8;
-  --even-gray: #eaebec;
-  --text-gray: #4c4d4e;
+    --gray-bg: #eeeff0;
+    --primary-gray: #9e9fa0;
+    --primary-red: #AA2218;
+    --odd-gray: #f6f7f8;
+    --even-gray: #eaebec;
+    --text-gray: #4c4d4e;
+    font-size: 14px;
 }
 
 body {
-  color: var(--text-gray);
+    color: var(--text-gray);
 }
 
-.banner {
-  background-image: url("assets/img/banner-back.jpg");
-  object-fit: cover;
-}
 
 .siteName {
-  font-size: 4em;
+    font-size: 4em;
 }
 
 .siteSlogan {
-  font-size: 1.2em;
-  line-height: 1em;
-  font-weight: lighter;
+    font-size: 1.2em;
+    line-height: 1em;
+    font-weight: lighter;
 }
 
 .page-title {
-  color: var(--primary-red);
-  font-size: x-large;
-  font-weight: lighter;
+    color: var(--primary-red);
+    font-size: x-large;
+    font-weight: lighter;
 }
 
 .bg-gray {
-  background-color: var(--gray-bg);
+    background-color: var(--gray-bg);
+}
+
+.btn-sq {
+    padding: 1em 3em;
 }
 
 .btn-gray {
-  transition: .2s;
-  border-radius: 0;
-  background-color: var(--primary-gray);
-  color: white;
-  font-size: small;
-  text-transform: uppercase;
+    transition: .2s;
+    border-radius: 0;
+    background-color: var(--primary-gray);
+    color: white;
+    font-size: small;
+    text-transform: uppercase;
+}
+
+.btn-calendar {
+    border-radius: 0;
+    border: 1px solid var(--primary-gray);
+    color: var(--text-gray);
+}
+
+.btn-calendar:disabled {
+    color: #aaaaaa;
+    opacity: 1;
 }
 
 .btn-gray:hover {
-  transition: .2s;
-  background-color: #9E9FA0dd;
-  color: white;
+    transition: .2s;
+    background-color: #9E9FA0dd;
+    color: white;
 }
 
 .btn-gray:active {
-  transition: .2s;
-  background-color: #9E9FA0aa;
-  color: white;
+    transition: .2s;
+    background-color: #9E9FA0aa;
+    color: white;
+}
+
+.btn-red {
+    transition: .2s;
+    border-radius: 0;
+    background-color: var(--primary-red);
+    color: white;
+    font-size: small;
+    text-transform: uppercase;
+}
+
+.btn-red:hover {
+    transition: .2s;
+    background-color: #AA2218dd;
+    color: white;
+}
+
+.btn-red:active {
+    transition: .2s;
+    background-color: #AA2218aa;
+    color: white;
 }
 
 .btn-favorite-active span {
-  opacity: .5;
+    opacity: .5;
 }
 
 .btn-favorite-active fa-icon {
-  color: red;
-  opacity: 1;
+    color: red;
+    opacity: 1;
 }
 
 .btn-banner {
-  color: white;
-  border-radius: 0;
-  padding: 0.25em 0.20em;
+    color: white;
+    border-radius: 0;
+    padding: 0.25em 0.20em;
 }
 
 .btn-banner:hover {
-  background-color: #ffffff22;
-  color: white;
+    background-color: #ffffff22;
+    color: white;
 }
 
 .btn-banner:active {
-  background-color: #ffffff11;
-  color: white;
+    background-color: #ffffff11;
+    color: white;
 }
 
 
 @media (max-width: 576px) {
-  .mobile-hidden {
-    display: none !important;
-  }
+    .mobile-hidden {
+        display: none !important;
+    }
 
-  .siteName {
-    font-size: 1.5em;
-  }
+    .siteName {
+        font-size: 1.5em;
+    }
 
-  .isu {
-    font-size: 3em;
-  }
+    .isu {
+        font-size: 3em;
+    }
 }
 
 @media (min-width: 576px) {
-  .mobile-only {
-    display: none;
-  }
+    .mobile-only {
+        display: none;
+    }
 }
 
 .flex-gap {
-  display: flex;
+    display: flex;
 }
 
 .flex-gap > div {
-  margin: .5rem;
-}
-
-.input-dropdown {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--primary-gray);
-  border-radius: 0;
-  color: var(--primary-gray);
-}
-
-.input-dropdown > fa-icon {
-  color: var(--primary-gray);
+    margin: .5rem;
 }
 
 .input-control > input {
-  border-radius: 0;
-  border-top: 1px solid var(--primary-gray);
-  border-left: 0;
-  color: var(--primary-gray);
-  border-bottom: 1px solid var(--primary-gray);
-  border-right: 1px solid var(--primary-gray);
+    border-radius: 0;
+    border-top: 1px solid var(--primary-gray);
+    border-left: 0;
+    color: var(--text-gray);
+    border-bottom: 1px solid var(--primary-gray);
+    border-right: 1px solid var(--primary-gray);
 }
 
+.input-control > input:disabled {
+    background-color: white;
+    color: #aaaaaa;
+}
+
+.input-control > select {
+    border-radius: 0;
+    border-top: 1px solid var(--primary-gray);
+    border-left: 0;
+    color: var(--text-gray);
+    border-bottom: 1px solid var(--primary-gray);
+    border-right: 1px solid var(--primary-gray);
+}
+
+.input-control > select:disabled {
+    color: #aaaaaa;
+}
+
+
+
+/*.custom-select:disabled {*/
+/*    background-color: white;*/
+/*    color: #aaaaaa;*/
+/*}*/
+
 .input-group-text {
-  background-color: white;
-  border-radius: 0;
-  color: var(--primary-gray);
-  border-top: 1px solid var(--primary-gray);
-  border-right: 0;
-  border-bottom: 1px solid var(--primary-gray);
-  border-left: 1px solid var(--primary-gray);
+    background-color: white;
+    border-radius: 0;
+    color: var(--primary-gray);
+    border-top: 1px solid var(--primary-gray);
+    border-right: 0;
+    border-bottom: 1px solid var(--primary-gray);
+    border-left: 1px solid var(--primary-gray);
+}
+
+.input-calendar {
+    border-radius: 0;
+    border-top: 1px solid var(--primary-gray);
+    border-left: 0;
+    color: var(--primary-gray);
+    border-bottom: 1px solid var(--primary-gray);
+    border-right: 1px solid var(--primary-gray);
+}
+
+.input-calendar:disabled {
+    background-color: white;
+    color: #aaaaaa;
 }
 
 .dropdown-menu {
@@ -157,4 +217,31 @@ button.dropdown-item {
 button.dropdown-item:hover {
     background-color: var(--primary-gray);
     color: white;
+}
+
+.ngb-tp-input {
+    border-color: var(--primary-gray);
+    border-radius: 0;
+    color: var(--text-gray)
+}
+
+.ngb-tp-meridian > .btn {
+    transition: .2s;
+    border-radius: 0;
+    border-color: var(--primary-gray);
+    color: var(--text-gray);
+}
+
+.ngb-tp-meridian > .btn:hover {
+    transition: .2s;
+    background-color: var(--gray-bg);
+}
+
+.star-bg {
+    font-size: 1rem;
+    color: #999999;
+}
+
+.star-filled {
+    color: #EED430;
 }

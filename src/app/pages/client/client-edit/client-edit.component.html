@@ -1,0 +1,101 @@
+<div class="row m-0 bg-white justify-content-center">
+    <div class="col col-11 col-md-9 px-0">
+        <div class="row mx-0 my-3 align-items-stretch">
+            <div class="col col-md-4">
+                <span class="page-title" style="font-weight: lighter;">{{pageTitle}}</span>
+            </div>
+            <div class="col col-md-8 text-muted small">
+                {{pageDescription}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row bg-gray justify-content-center p-3 mx-0">
+    <div class="col-12 col-md-9 bg-white mb-3 py-3">
+        <div class="row mx-0">
+            <div class="col-12 col-md-3 p-1" style="height: 40px">
+                <div class="input-group input-control">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <fa-icon [icon]="icName"></fa-icon>
+                        </div>
+                    </div>
+                    <ng-template #rt let-r="result" let-t="term">
+                        <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                    </ng-template>
+                    <ng-template #ph>
+                        Contact name...
+                    </ng-template>
+                    <input [disabled]="formDisabled" id="typeahead-http" type="text" class="form-control input-control"
+                           [class.is-invalid]="nameSearchFailed" [(ngModel)]="inputName" [ngbTypeahead]="findContact"
+                           [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="setData($event.item)"
+                           placeholder="Contact name ..."/>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 p-1" style="height: 40px">
+                <div class="input-group input-control">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <fa-icon [icon]="icType"></fa-icon>
+                        </div>
+                    </div>
+                    <select class="custom-select input-control" [(ngModel)]="inputType">
+                        <option selected disabled [value]="''">Contact type</option>
+                        <option [disabled]="formDisabled && inputType != 'Type 1'" [value]="'Type 1'">Contact type 1
+                        </option>
+                        <option [disabled]="formDisabled  && inputType != 'Type 2'" [value]="'Type 2'">Contact type 2
+                        </option>
+                        <option [disabled]="formDisabled && inputType != 'Type 3'" [value]="'Type 3'">Contact type 3
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 p-1" style="height: 40px">
+                <div class="input-group input-control flex-grow-1">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <fa-icon [icon]="icPhone"></fa-icon>
+                        </div>
+                    </div>
+                    <input [disabled]="formDisabled" type="text" class="form-control" placeholder="Phone:"
+                           [(ngModel)]="inputPhone">
+                </div>
+            </div>
+            <div class="col-12 col-md-3 p-1" style="height: 40px">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button [disabled]="formDisabled" class="btn btn-calendar" (click)="d.toggle()"
+                                    type="button">
+                                <fa-icon [icon]="icDate"></fa-icon>
+                            </button>
+                        </div>
+                        <input [disabled]="formDisabled" class="form-control input-calendar" placeholder="yyyy-mm-dd"
+                               name="dp" [(ngModel)]="inputDate" ngbDatepicker #d="ngbDatepicker">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-9 mb-3 px-0 bg-white">
+        <angular-editor [disabled]="formDisabled" [(ngModel)]="inputDescription"
+                        [config]="editorConfig"></angular-editor>
+    </div>
+    <div class="col-12 col-md-9 mb-3 px-0 text-right">
+        <div *ngIf="error">
+            <ngb-alert class="text-center" [dismissible]="false" type="danger">
+                <fa-icon class="mr-3" [icon]="icError"></fa-icon> Cannot create client. Please check form.
+            </ngb-alert>
+        </div>
+        <div *ngIf="!(loading$ | async); else creating">
+            <button class="btn btn-gray btn-sq mr-3" *ngIf="selectedClient" (click)="resetForm()">RESET FORM</button>
+            <button class="btn btn-red btn-sq" (click)="actionStream$.next('create')" *ngIf="pagePath.includes('create')">SEND</button>
+            <button class="btn btn-red btn-sq" (click)="actionStream$.next('edit')" *ngIf="pagePath.includes('edit')">EDIT</button>
+        </div>
+        <ng-template #creating>
+            <ngb-alert class="text-center" [dismissible]="false" [type]="'primary'"> <fa-icon [icon]="icSpinner" [spin]="true" class="mr-3"></fa-icon>Creating...</ngb-alert>
+        </ng-template>
+    </div>
+</div>
+

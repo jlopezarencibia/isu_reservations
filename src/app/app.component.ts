@@ -24,3 +24,9 @@ export class AppComponent {
     this.path = appService.path;
   }
 }
+
+export enum ActionType {
+    CREATE = 'create',
+    EDIT = 'edit',
+    CANCEL = 'cancel'
+}
