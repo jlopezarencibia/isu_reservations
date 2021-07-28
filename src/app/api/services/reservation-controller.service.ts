@@ -170,12 +170,14 @@ export class ReservationControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update$Response(params?: {
-    body?: ReservationEntity
+  update$Response(params: {
+    id: number;
+    body: ReservationEntity
   }): Observable<StrictHttpResponse<ReservationEntity>> {
 
     const rb = new RequestBuilder(this.rootUrl, ReservationControllerService.UpdatePath, 'patch');
     if (params) {
+      rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
     }
 
@@ -196,11 +198,58 @@ export class ReservationControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update(params?: {
-    body?: ReservationEntity
+  update(params: {
+    id: number;
+    body: ReservationEntity
   }): Observable<ReservationEntity> {
 
     return this.update$Response(params).pipe(
+      map((r: StrictHttpResponse<ReservationEntity>) => r.body as ReservationEntity)
+    );
+  }
+
+  /**
+   * Path part for operation toggleFavorite
+   */
+  static readonly ToggleFavoritePath = '/api/reservations/favorite/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `toggleFavorite()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  toggleFavorite$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<ReservationEntity>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ReservationControllerService.ToggleFavoritePath, 'patch');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ReservationEntity>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `toggleFavorite$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  toggleFavorite(params: {
+    id: number;
+  }): Observable<ReservationEntity> {
+
+    return this.toggleFavorite$Response(params).pipe(
       map((r: StrictHttpResponse<ReservationEntity>) => r.body as ReservationEntity)
     );
   }

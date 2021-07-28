@@ -2,3 +2,13 @@
 .dropdown-toggle::after {
   display: none;
 }
+
+
+.star-bg {
+    font-size: 1.5rem;
+    color: #999999;
+}
+
+.star-filled {
+    color: #EED430;
+}

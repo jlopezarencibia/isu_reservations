@@ -12,6 +12,12 @@
 </div>
 
 <div class="row bg-gray justify-content-center p-3">
+    <div *ngIf="pagePath.includes('create')">
+        <div class="col-11 col-md-9 bg-white mb-3 p-2" style="color: var(--text-gray)" *ngIf="owner$ | async as owner">
+            <fa-icon [icon]="icUser" class="mr-3"></fa-icon>
+            {{owner.name}}
+        </div>
+    </div>
     <div class="col-11 col-md-9 bg-white mb-3 p-2">
         <div class="row mx-0 align-items-center p-2">
             <div class="col-12 col-md-6 pl-md-0">
@@ -21,46 +27,80 @@
                             <fa-icon [icon]="icLocation"></fa-icon>
                         </div>
                     </div>
-                    <input type="text" class="form-control input-control" placeholder="Location name" [(ngModel)]="inputLocationName">
+                    <input type="text" class="form-control input-control" placeholder="Location name"
+                           [(ngModel)]="inputLocationName">
                 </div>
                 <div class="row mx-0 my-3 justify-content-between">
-                    <div class="col-12 col-md-6 px-md-0">
+                    <div class="col-12 col-md-6 px-0 mb-3 mb-md-0">
                         <div class="input-group">
-                            <input class="form-control input-calendar" placeholder="yyyy-mm-dd"
-                                   name="dp" [(ngModel)]="inputDate" ngbDatepicker #d="ngbDatepicker">
-                            <div class="input-group-append">
+                            <div class="input-group-prepend">
                                 <button class="btn btn-calendar" (click)="d.toggle()"
                                         type="button">
                                     <fa-icon [icon]="icCalendar"></fa-icon>
                                 </button>
                             </div>
+                            <input class="form-control input-calendar" placeholder="yyyy-mm-dd"
+                                   name="dp" [(ngModel)]="inputDate" ngbDatepicker #d="ngbDatepicker">
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 px-md-0 d-flex justify-content-end">
+                    <div class="col-12 col-md-6 px-0 d-flex justify-content-center">
                         <ngb-timepicker [(ngModel)]="inputTime" [meridian]="true" [spinners]="false"></ngb-timepicker>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-6 pr-md-0">
-                <div>Ranking</div>
-                <div>
-                    <ngb-rating [max]="5" [rate]="inputRanking">
-                        <ng-template let-fill="fill" let-index="index">
-                            <span class="star-bg" [class.star-filled]="fill === 100">&#9733;</span>
-                        </ng-template>
-                    </ngb-rating>
-                </div>
-                    <div class="form-check mt-3">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="inputFavorite">
-                        <label class="form-check-label">
-                            Favorite
-                        </label>
+                <div class="row mx-0 my-3 justify-content-center">
+                    <div class="col-12 col-md-6 px-0 mb3 mb-md-0 d-flex align-items-center">
+                        <div>Ranking:</div>
+                        <div>
+                            <ngb-rating [max]="5" [rate]="inputRanking" [(ngModel)]="inputRanking" class="ml-3">
+                                <ng-template let-fill="fill" let-index="index">
+                                    <span class="star-bg" [class.star-filled]="fill === 100">&#9733;</span>
+                                </ng-template>
+                            </ngb-rating>
+                        </div>
                     </div>
+                    <div class="col-12 col-md-6 px-0 mb3 mb-md-0">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="inputFavorite">
+                            <label class="form-check-label">
+                                Favorite
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-    <div class="col-11 col-md-9 text-right px-0" *ngIf="!(loading$ | async)">
-        <button class="btn btn-red btn-sq" (click)="createStream$.next()">Crear Reservacion</button>
+    <div class="col-12 col-md-9 mb-3 px-md-0">
+        <div *ngIf="error">
+            <ngb-alert class="text-center" [dismissible]="false" type="danger">
+                <fa-icon class="mr-3" [icon]="icError"></fa-icon>
+                Cannot create client. Please check form.
+            </ngb-alert>
+        </div>
+        <div *ngIf="!(loading$ | async); else creating" class="d-flex align-items-center">
+            <button class="btn btn-black btn-sq" (click)="doRemove()"
+                    *ngIf="pagePath.includes('edit')"><fa-icon [icon]="icDelete"></fa-icon>
+            </button>
+            <div class="d-block flex-grow-1"></div>
+            <button class="btn btn-gray btn-sq" routerLink="/reservations"
+                    *ngIf="pagePath.includes('edit')">Cancel
+            </button>
+            <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('create')"
+                    *ngIf="pagePath.includes('create')">Reserve
+            </button>
+            <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('edit')" *ngIf="pagePath.includes('edit')">
+                Save
+            </button>
+        </div>
+        <ng-template #creating>
+            <ngb-alert class="text-center" [dismissible]="false" [type]="'primary'">
+                <fa-icon [icon]="icSpinner" [spin]="true" class="mr-3"></fa-icon>
+                Creating...
+            </ngb-alert>
+        </ng-template>
     </div>
 </div>
 

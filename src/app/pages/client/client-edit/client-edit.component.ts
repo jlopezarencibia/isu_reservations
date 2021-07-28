@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ClientControllerService} from "../../../api/services/client-controller.service";
 import {from, Observable, of, OperatorFunction, Subject} from "rxjs";
-import {catchError, debounceTime, distinctUntilChanged, map, mapTo, mergeAll, switchMap, tap} from "rxjs/operators";
+import {catchError, debounceTime, distinctUntilChanged, map, mergeAll, switchMap, tap} from "rxjs/operators";
 import {faCalendar, faExclamationCircle, faGlobe, faPhone, faSpinner, faUser} from "@fortawesome/free-solid-svg-icons";
 import {AppService} from "../../../services/app.service";
 import {AngularEditorConfig} from "@kolkov/angular-editor";
 import {NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
-import {ClientEntity} from "../../../api/models/client-entity";
 import {ActionType} from "../../../app.component";
+import {ClientEntity} from "../../../api/models/client-entity";
+import {ClientControllerService} from "../../../api/services/client-controller.service";
 
 @Component({
     selector: 'app-client-edit',
@@ -25,6 +25,7 @@ export class ClientEditComponent implements OnInit {
     pageTitle = '';
     pageDescription = '';
     pagePath = '';
+    pathId?: number;
 
 
     // ICONS
@@ -64,6 +65,7 @@ export class ClientEditComponent implements OnInit {
         this.pagePath = activatedRoute.snapshot.data.path;
         this.appService.setPath(this.pagePath);
         this.editorConfig = appService.getEditorConfig();
+        this.pathId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!) ?? -1;
     }
 
     ngOnInit(): void {
@@ -82,7 +84,7 @@ export class ClientEditComponent implements OnInit {
                         if (this.selectedClient) {
                             this.router.navigate(['/reservations', 'create', this.selectedClient.id])
                         } else {
-                            this.clientController.create1({
+                            this.clientController.add({
                                 body: {
                                     name: this.inputName!,
                                     type: this.inputType!,
@@ -92,22 +94,24 @@ export class ClientEditComponent implements OnInit {
                                 }
                             }).pipe(
                                 catchError((err, caught) => {
-                                    console.log('Error while creating user', err);
+                                    console.log('Error while creating user ', err);
                                     this.error = true;
                                     return caught;
                                 })
-                            ).subscribe((result) => {
-                                console.log('Created: ', result);
-                                this.router.navigate(['/reservations', 'create', result.id]);
-                            },
-                                (error) => {
+                            ).subscribe((result: ClientEntity) => {
+                                    console.log('Created: ', result);
+                                    this.router.navigate(['/reservations', 'create', result.id]);
+                                },
+                                (error: any) => {
                                     console.log('Error in subscription: ', error);
+                                    this.error = true;
                                 });
                         }
                         break;
                     }
                     case ActionType.EDIT : {
-                        this.clientController.update1({
+                        this.clientController.edit({
+                            id: this.pathId!,
                             body: {
                                 name: this.inputName,
                                 type: this.inputType,
@@ -125,13 +129,13 @@ export class ClientEditComponent implements OnInit {
                     }
                     case ActionType.CANCEL : {
                         this.error = true;
-                        return of(false);
+                        break;
                     }
                 }
                 return of(false);
             })
         )
-        this.loading$ = from([actionStream, this.actionStream$.pipe(mapTo(false))]).pipe(mergeAll())
+        this.loading$ = from([actionStream, this.actionStream$.pipe(map((value => !!value)))]).pipe(mergeAll());
     }
 
     checkForm(): boolean {
@@ -157,8 +161,9 @@ export class ClientEditComponent implements OnInit {
         this.error = false;
     }
 
-    findContact: OperatorFunction<string, readonly ClientEntity[]> = (text$: Observable<string>) =>
-        text$.pipe(
+    findContact: OperatorFunction<string, readonly ClientEntity[]> = (text$: Observable<string>) => {
+       if (this.pagePath.includes('create')) {
+        return text$.pipe(
             debounceTime(300),
             distinctUntilChanged(),
             switchMap(term =>
@@ -170,7 +175,11 @@ export class ClientEditComponent implements OnInit {
                     )
                 )
             )
-        );
+        )
+       } else {
+           return of([]);
+       }
+    };
 
     formatter = (c: { name: string }) => c.name;
 

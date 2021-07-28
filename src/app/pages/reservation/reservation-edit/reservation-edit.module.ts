@@ -2,7 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservationEditComponent } from './reservation-edit.component';
 import {RouterModule} from "@angular/router";
-import {NgbDatepickerModule, NgbDropdownModule, NgbRatingModule, NgbTimepickerModule} from "@ng-bootstrap/ng-bootstrap";
+import {
+    NgbAlertModule,
+    NgbDatepickerModule,
+    NgbDropdownModule,
+    NgbRatingModule,
+    NgbTimepickerModule
+} from "@ng-bootstrap/ng-bootstrap";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 
@@ -25,7 +31,8 @@ import {FormsModule} from "@angular/forms";
         FormsModule,
         NgbDatepickerModule,
         NgbTimepickerModule,
-        NgbRatingModule
+        NgbRatingModule,
+        NgbAlertModule
     ]
 })
 export class ReservationEditModule { }

@@ -3,8 +3,9 @@ import {ActivatedRoute} from "@angular/router";
 import * as solid from "@fortawesome/free-solid-svg-icons";
 import * as outlined from "@fortawesome/free-regular-svg-icons";
 import {AppService} from "../../../services/app.service";
-import {ReservationEntity} from "../../../api/models/reservation-entity";
 import {Observable} from "rxjs";
+import {tap} from "rxjs/operators";
+import {ReservationEntity} from "../../../api/models/reservation-entity";
 import {ReservationControllerService} from "../../../api/services/reservation-controller.service";
 
 @Component({
@@ -55,9 +56,16 @@ export class ReservationListComponent implements OnInit {
                 sortBy: this.sortBy,
                 sortDirection: this.sortDirection
             }
-        });
+        }).pipe(
+            tap((v) => console.log(v))
+        );
 
         this.count$ = this.reservationController.count();
     }
 
+    toggleFavorite(reservation: ReservationEntity) {
+        console.log(reservation.favorite)
+        this.reservationController.toggleFavorite({id: reservation.id!}).subscribe();
+        reservation.favorite = !reservation.favorite;
+    }
 }

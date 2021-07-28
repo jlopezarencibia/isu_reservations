@@ -57,11 +57,10 @@
                             </div>
                         </td>
                         <td>
-                            <div class="d-flex align-items-center" style="cursor: pointer">
-                                <div class="mr-2 mobile-hidden" [ngClass]="{'text-black-50': reservation.favorite!}">Add Favorites</div>
+                            <div class="d-flex align-items-center" style="cursor: pointer" (click)="toggleFavorite(reservation)">
+                                <div class="mr-2 mobile-hidden" [ngClass]="{'text-black-25': reservation.favorite!}">Add Favorites</div>
                                 <div>
-<!--                                    <fa-icon [icon]="reservation.favorite ? icHeart : icHeartOutline" style="font-size: 1.5em"  [ngStyle]="{'color': reservation.favorite ? 'var(&#45;&#45;primary-red)' : 'var(&#45;&#45;text-gray)'}"></fa-icon>-->
-                                    <img src="assets/icons/ic-favorite.svg" alt="" style="height: 24px; width: 24px">
+                                    <img [src]="reservation.favorite ? 'assets/icons/ic-favorite-active.svg' : 'assets/icons/ic-favorite.svg'" alt="" style="height: 24px; width: 24px">
                                 </div>
                             </div>
                         </td>

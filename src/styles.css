@@ -14,6 +14,9 @@ body {
     color: var(--text-gray);
 }
 
+.text-black-25 {
+    color: rgba(0, 0, 0, 0.25) !important;
+}
 
 .siteName {
     font-size: 4em;
@@ -89,6 +92,27 @@ body {
 .btn-red:active {
     transition: .2s;
     background-color: #AA2218aa;
+    color: white;
+}
+
+.btn-black {
+    transition: .2s;
+    border-radius: 0;
+    background-color: black;
+    color: white;
+    font-size: small;
+    text-transform: uppercase;
+}
+
+.btn-black:hover {
+    transition: .2s;
+    background-color: #000000dd;
+    color: white;
+}
+
+.btn-black:active {
+    transition: .2s;
+    background-color: #000000aa;
     color: white;
 }
 

@@ -70,21 +70,21 @@ export class ClientControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create1
+   * Path part for operation add
    */
-  static readonly Create1Path = '/api/clients';
+  static readonly AddPath = '/api/clients';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create1()` instead.
+   * To access only the response body, use `add()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create1$Response(params?: {
-    body?: Client
+  add$Response(params: {
+    body: Client
   }): Observable<StrictHttpResponse<ClientEntity>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.Create1Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.AddPath, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,15 +102,15 @@ export class ClientControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create1$Response()` instead.
+   * To access the full response (for headers, for example), `add$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create1(params?: {
-    body?: Client
+  add(params: {
+    body: Client
   }): Observable<ClientEntity> {
 
-    return this.create1$Response(params).pipe(
+    return this.add$Response(params).pipe(
       map((r: StrictHttpResponse<ClientEntity>) => r.body as ClientEntity)
     );
   }
@@ -128,7 +128,7 @@ export class ClientControllerService extends BaseService {
    */
   reserve$Response(params: {
     id: number;
-    body?: Reservation
+    body: Reservation
   }): Observable<StrictHttpResponse<ReservationEntity>> {
 
     const rb = new RequestBuilder(this.rootUrl, ClientControllerService.ReservePath, 'post');
@@ -156,7 +156,7 @@ export class ClientControllerService extends BaseService {
    */
   reserve(params: {
     id: number;
-    body?: Reservation
+    body: Reservation
   }): Observable<ReservationEntity> {
 
     return this.reserve$Response(params).pipe(
@@ -211,21 +211,21 @@ export class ClientControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete
+   * Path part for operation remove
    */
-  static readonly DeletePath = '/api/clients/{id}';
+  static readonly RemovePath = '/api/clients/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete()` instead.
+   * To access only the response body, use `remove()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete$Response(params: {
+  remove$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<ClientEntity>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.DeletePath, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.RemovePath, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -243,36 +243,38 @@ export class ClientControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete$Response()` instead.
+   * To access the full response (for headers, for example), `remove$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete(params: {
+  remove(params: {
     id: number;
   }): Observable<ClientEntity> {
 
-    return this.delete$Response(params).pipe(
+    return this.remove$Response(params).pipe(
       map((r: StrictHttpResponse<ClientEntity>) => r.body as ClientEntity)
     );
   }
 
   /**
-   * Path part for operation update1
+   * Path part for operation edit
    */
-  static readonly Update1Path = '/api/clients/{id}';
+  static readonly EditPath = '/api/clients/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update1()` instead.
+   * To access only the response body, use `edit()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update1$Response(params?: {
-    body?: ClientEntity
+  edit$Response(params: {
+    id: number;
+    body: Client
   }): Observable<StrictHttpResponse<ClientEntity>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.Update1Path, 'patch');
+    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.EditPath, 'patch');
     if (params) {
+      rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
     }
 
@@ -289,15 +291,16 @@ export class ClientControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update1$Response()` instead.
+   * To access the full response (for headers, for example), `edit$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update1(params?: {
-    body?: ClientEntity
+  edit(params: {
+    id: number;
+    body: Client
   }): Observable<ClientEntity> {
 
-    return this.update1$Response(params).pipe(
+    return this.edit$Response(params).pipe(
       map((r: StrictHttpResponse<ClientEntity>) => r.body as ClientEntity)
     );
   }

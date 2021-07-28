@@ -1,12 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {faCalendar, faClock, faGlobe, faMapPin, faPhone, faUser} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCalendar,
+    faExclamationCircle,
+    faMapPin,
+    faSpinner,
+    faTrashAlt,
+    faUser
+} from "@fortawesome/free-solid-svg-icons";
 import {AppService} from "../../../services/app.service";
 import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
-import {NgbTime} from "@ng-bootstrap/ng-bootstrap/timepicker/ngb-time";
-import * as moment from "moment";
 import {from, Observable, of, Subject} from "rxjs";
-import {map, mergeAll, switchMap, tap} from "rxjs/operators";
+import {catchError, map, mergeAll, switchMap, tap} from "rxjs/operators";
+import {ActionType} from "../../../app.component";
+import {ReservationEntity} from "../../../api/models/reservation-entity";
+import {ClientEntity} from "../../../api/models/client-entity";
+import {ReservationControllerService} from "../../../api/services/reservation-controller.service";
 import {ClientControllerService} from "../../../api/services/client-controller.service";
 
 @Component({
@@ -16,16 +25,24 @@ import {ClientControllerService} from "../../../api/services/client-controller.s
 })
 export class ReservationEditComponent implements OnInit {
 
+    // PAGE INFO
     pageTitle = '';
     pageDescription = '';
+    pagePath = '';
+    pathId?: number;
 
     // ASYNC
-    createStream$ = new Subject();
+    actionStream$ = new Subject();
     loading$?: Observable<boolean>;
+    owner$?: Observable<ClientEntity>;
 
     // ICONS
     icLocation = faMapPin;
     icCalendar = faCalendar;
+    icUser = faUser;
+    icError = faExclamationCircle;
+    icSpinner = faSpinner;
+    icDelete = faTrashAlt;
 
     // INPUTS
     inputLocationName = ''
@@ -41,50 +58,112 @@ export class ReservationEditComponent implements OnInit {
         private readonly activatedRoute: ActivatedRoute,
         private readonly appService: AppService,
         private readonly clientController: ClientControllerService,
+        private readonly reservationController: ReservationControllerService,
         private readonly router: Router
     ) {
         this.pageTitle = activatedRoute.snapshot.data.name;
         this.pageDescription = activatedRoute.snapshot.data.description;
-        this.appService.setPath(activatedRoute.snapshot.data.path)
+        this.pagePath = activatedRoute.snapshot.data.path;
+        this.appService.setPath(this.pagePath)
+        this.pathId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
     }
 
     ngOnInit(): void {
-        const createStream = this.createStream$.pipe(
-            tap(() => console.log("Creating reservation...")),
-            map(() => this.checkForm()),
-            switchMap((value) => {
-                if (!value) {
-                    this.error = true;
-                    console.log('Cannot create reservation!. Invalid form.')
+        if (this.pagePath.includes('edit')) {
+            this.reservationController.findById({id: this.pathId!}).subscribe(
+                result => {
+                    this.inputLocationName = result.location!;
+                    this.inputDate = this.appService.getNgbDate(result.date!);
+                    this.inputTime = this.appService.getNgbTime(result.date!);
+                    this.inputRanking = result.ranking!;
+                    this.inputFavorite = result.favorite!
+                }
+            )
+        }
+        const actionStream = this.actionStream$.pipe(
+            map((value) => {
+                console.log('Checking form...')
+                console.log(this.pathId)
+                if (this.checkForm()) {
+                    return value === 'create' ? ActionType.CREATE : ActionType.EDIT
                 } else {
-                    console.log('Getting Client Id...');
-                    const clientId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
-                    console.log('Client Id: ', clientId);
-
-                    console.log(this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime));
-                    this.clientController.reserve({id: clientId, body: {
-                        location: this.inputLocationName,
-                            date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime),
-                            favorite: this.inputFavorite,
-                            ranking: this.inputRanking
-                        }}).subscribe(result => {
-                        console.log(result);
-                        this.router.navigate(['/reservations']);
-                    })
-                    // this.clientController.create1({body: {name: this.inputName!, phone: this.inputPhone!, description: this.inputDescription!, birthDate: this.appService.getDateInMilis(this.inputDate!)}}).pipe(
-                    //     tap((value) => console.log('Client created...', value))
-                    // ).subscribe(result => {
-                    //     this.router.navigate(['/reservations/create', result.id])
-                    // })
+                    return ActionType.CANCEL
+                }
+            }),
+            switchMap((action) => {
+                console.log('action: ', action);
+                switch (action) {
+                    case ActionType.CREATE: {
+                        console.log(this.inputRanking)
+                        this.clientController.reserve({
+                            id: this.pathId!, body: {
+                                location: this.inputLocationName,
+                                date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime),
+                                favorite: this.inputFavorite,
+                                ranking: this.inputRanking
+                            }
+                        }).pipe(
+                            catchError((err, caught) => {
+                                console.log('Error while reserving: ', err);
+                                this.error = true;
+                                return caught;
+                            })
+                        ).subscribe(
+                            (result: ReservationEntity) => {
+                                console.log('Created: ', result);
+                                this.router.navigate(['/reservations']);
+                            },
+                            (error: any) => {
+                                console.log('Error in sub: ', error);
+                                this.error = true;
+                            })
+                        break;
+                    }
+                    case ActionType.EDIT: {
+                        console.log(this.inputFavorite);
+                        this.reservationController.update({
+                            id: this.pathId!, body: {
+                                location: this.inputLocationName!,
+                                date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime!),
+                                favorite: this.inputFavorite!,
+                                ranking: this.inputRanking!
+                            }
+                        }).pipe(
+                            tap(val => console.log(val)),
+                            catchError((err, caught) => {
+                                console.log('Error while reserving: ', err);
+                                this.error = true;
+                                return caught;
+                            })
+                        )
+                            .subscribe(
+                                (result: ReservationEntity) => {
+                                    console.log('Created: ', result);
+                                    this.router.navigate(['/reservations']);
+                                },
+                                (error: any) => {
+                                    console.log('Error in sub: ', error);
+                                    this.error = true;
+                                })
+                        break;
+                    }
+                    case ActionType.CANCEL: {
+                        this.error = true;
+                        break;
+                    }
                 }
                 return of(false);
             })
         )
-        this.loading$ = from([createStream, this.createStream$.pipe(map((value => !!value)))]).pipe(mergeAll())
+        this.loading$ = from([actionStream, this.actionStream$.pipe(map((value => !!value)))]).pipe(mergeAll())
+        this.owner$ = this.clientController.findById1({id: this.pathId!})
     }
 
-    checkForm():boolean {
+    checkForm(): boolean {
         return (!!this.inputDate && this.inputLocationName.length > 0)
+    }
+
+    doRemove = () => {
     }
 
 }

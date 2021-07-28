@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import * as moment from "moment";
-import {Reservation} from "../api/models/reservation";
 import {AngularEditorConfig} from "@kolkov/angular-editor";
 import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
-import {parse} from "@fortawesome/fontawesome-svg-core";
 
 @Injectable({
     providedIn: 'root'
@@ -19,17 +17,6 @@ export class AppService {
 
     setPath(pathSegment: string) {
         this.path.next(pathSegment);
-    }
-
-    generateDummyReservations(): Reservation[] {
-        const reservations: Reservation[] = [];
-        reservations.push({
-            location: 'Second Dock',
-            date: moment('May 17 2021 9:00 pm', 'MMM DD YYYY h:mm a').toString(),
-            ranking: 4,
-            favorite: true
-        });
-        return reservations;
     }
 
     getEditorConfig(): AngularEditorConfig {
@@ -128,13 +115,13 @@ export class AppService {
     getDateTimeInMilis(date: NgbDateStruct, time: NgbTimeStruct): string {
         console.log(date);
         console.log(time);
-        return moment((date.year + '-' + date.month + '-' + date.day + ' ' + time.hour + ':' + time.minute), 'YYY-MM-DD HH:mm').format('x')
+        return moment((date.year + '-' + date.month + '-' + date.day + ' ' + time.hour + ':' + time.minute), 'YYYY-MM-DD HH:mm').format('x')
     }
 
     getNgbTime(dateInMilis: string): NgbTimeStruct {
-        const date = moment(dateInMilis, 'xx');
+        const date = moment(dateInMilis, 'x');
         const hour = parseInt(date.format('HH'));
-        const minute = parseInt(date.format('MM'));
+        const minute = parseInt(date.format('mm'));
         const second = 0;
         return {hour, minute, second}
     }
