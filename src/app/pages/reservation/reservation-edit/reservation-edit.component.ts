@@ -20,6 +20,7 @@ import {ReservationControllerService} from "../../../api/services/reservation-co
 import {ClientControllerService} from "../../../api/services/client-controller.service";
 import {AutoUnsubscribe} from "ngx-auto-unsubscribe";
 import {DomSanitizer} from "@angular/platform-browser";
+import * as moment from "moment";
 
 @AutoUnsubscribe()
 @Component({
@@ -191,7 +192,9 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
     }
 
     checkForm(): boolean {
-        return (!!this.inputDate && this.inputLocationName.length > 0)
+        return (
+            this.inputLocationName.length > 0 &&
+            moment(this.inputDate?.day + '/' + this.inputDate?.month + '/' + this.inputDate?.year, 'D/M/YYYY').isValid())
     }
 
     doRemove = () => {

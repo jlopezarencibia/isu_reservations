@@ -18,6 +18,7 @@ import {ActionType} from "../../../app.component";
 import {ClientEntity} from "../../../api/models/client-entity";
 import {ClientControllerService} from "../../../api/services/client-controller.service";
 import {AutoUnsubscribe} from "ngx-auto-unsubscribe";
+import * as moment from "moment";
 
 @AutoUnsubscribe()
 @Component({
@@ -185,12 +186,14 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         // console.log('phone: ', this.inputPhone);
         // console.log('description: ', this.inputDescription);
         // console.log('date: ', this.inputDate);
+        // console.log(moment(this.inputDate?.day+'/'+this.inputDate?.month+'/'+this.inputDate?.year, 'D/M/YYYY'))
         // const result = (this.selectedClient ? ((this.inputName as ClientEntity).name!.length > 0) : this.inputName.length > 0) && this.inputType.length > 0 && !!this.inputDate;
         // console.log('Form is valid: ', result)
         // return result;
+
         return (this.selectedClient ? ((this.inputName as ClientEntity).name!.length > 0) : this.inputName.length > 0)
             && this.inputType.length > 0
-            && !!this.inputDate;
+            && moment(this.inputDate?.day + '/' + this.inputDate?.month + '/' + this.inputDate?.year, 'D/M/YYYY').isValid();
     }
 
     setData(incoming: ClientEntity) {
