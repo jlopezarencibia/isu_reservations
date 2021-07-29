@@ -5,7 +5,8 @@ import {RouterModule} from "@angular/router";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {NgbAlertModule, NgbDatepickerModule, NgbDropdownModule, NgbTypeaheadModule} from "@ng-bootstrap/ng-bootstrap";
 import {AngularEditorModule} from "@kolkov/angular-editor";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule} from "@angular/forms";
+import {PageHeaderModule} from "../../../components/page-header/page-header.module";
 
 
 
@@ -28,6 +29,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
         NgbDatepickerModule,
         NgbTypeaheadModule,
         NgbAlertModule,
+        PageHeaderModule,
     ]
 })
 export class ClientEditModule { }

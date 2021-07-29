@@ -1,15 +1,8 @@
-<div class="row m-0 bg-white justify-content-center">
-    <div class="col col-11 col-md-9 px-0">
-        <div class="row mx-0 my-3 align-items-stretch">
-            <div class="col col-md-4">
-                <span class="page-title" style="font-weight: lighter;">{{pageTitle}}</span>
-            </div>
-            <div class="col col-md-8 text-muted small">
-                {{pageDescription}}
-            </div>
-        </div>
-    </div>
-</div>
+<app-page-header
+    [pageTitle]="pageTitle"
+    [pageDescription]="pageDescription"
+    [buttonShow]="false">
+</app-page-header>
 
 <div class="row bg-gray justify-content-center p-3 mx-0">
     <div class="col-12 col-md-9 bg-white mb-3 py-3">
@@ -27,9 +20,12 @@
                     <ng-template #ph>
                         Contact name...
                     </ng-template>
+                    <input type="text" class="input-control form-control" [(ngModel)]="inputName"
+                           placeholder="Contact name ..." *ngIf="pagePath.includes('edit')">
                     <input [disabled]="formDisabled" id="typeahead-http" type="text" class="form-control input-control"
                            [class.is-invalid]="nameSearchFailed" [(ngModel)]="inputName" [ngbTypeahead]="findContact"
                            [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="setData($event.item)"
+                           *ngIf="pagePath.includes('create')"
                            placeholder="Contact name ..."/>
                 </div>
             </div>
@@ -85,16 +81,29 @@
     <div class="col-12 col-md-9 mb-3 px-0 text-right">
         <div *ngIf="error">
             <ngb-alert class="text-center" [dismissible]="false" type="danger">
-                <fa-icon class="mr-3" [icon]="icError"></fa-icon> Cannot create client. Please check form.
+                <fa-icon class="mr-3" [icon]="icError"></fa-icon>
+                Cannot create client. Please check form.
             </ngb-alert>
         </div>
-        <div *ngIf="!(loading$ | async); else creating">
-            <button class="btn btn-gray btn-sq mr-3" *ngIf="selectedClient" (click)="resetForm()">RESET FORM</button>
-            <button class="btn btn-red btn-sq" (click)="actionStream$.next('create')" *ngIf="pagePath.includes('create')">SEND</button>
-            <button class="btn btn-red btn-sq" (click)="actionStream$.next('edit')" *ngIf="pagePath.includes('edit')">EDIT</button>
+        <div *ngIf="!(loading$ | async); else creating" class="d-flex align-items-center">
+            <button class="btn btn-gray btn-sq mr-3" *ngIf="selectedClient" (click)="resetForm()">RESET</button>
+            <button class="btn btn-black btn-sq mr-3" *ngIf="pagePath.includes('edit')" (click)="doRemove()">
+                <fa-icon [icon]="icDelete"></fa-icon>
+            </button>
+            <div class="d-block flex-grow-1"></div>
+            <button class="btn btn-gray btn-sq" routerLink="/reservations">CANCEL</button>
+            <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('create')"
+                    *ngIf="pagePath.includes('create')">SEND
+            </button>
+            <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('edit')"
+                    *ngIf="pagePath.includes('edit')">EDIT
+            </button>
         </div>
         <ng-template #creating>
-            <ngb-alert class="text-center" [dismissible]="false" [type]="'primary'"> <fa-icon [icon]="icSpinner" [spin]="true" class="mr-3"></fa-icon>Creating...</ngb-alert>
+            <ngb-alert class="text-center" [dismissible]="false" [type]="'primary'">
+                <fa-icon [icon]="icSpinner" [spin]="true" class="mr-3"></fa-icon>
+                Creating...
+            </ngb-alert>
         </ng-template>
     </div>
 </div>

@@ -54,7 +54,7 @@ body {
 .btn-calendar {
     border-radius: 0;
     border: 1px solid var(--primary-gray);
-    color: var(--text-gray);
+    color: var(--primary-gray);
 }
 
 .btn-calendar:disabled {
@@ -128,7 +128,7 @@ body {
 .btn-banner {
     color: white;
     border-radius: 0;
-    padding: 0.25em 0.20em;
+    padding: 0.25em 0.5em;
 }
 
 .btn-banner:hover {
@@ -268,4 +268,20 @@ button.dropdown-item:hover {
 
 .star-filled {
     color: #EED430;
+}
+
+.vertical-middle {
+    vertical-align: middle !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.page-link {
+    color: var(--text-gray);
+}
+.page-item.active .page-link {
+    background-color: var(--primary-gray);
+    border-color: var(--primary-gray);
 }

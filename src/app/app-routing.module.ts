@@ -69,6 +69,11 @@ const routes: Routes = [
                     path: 'client-edit'
                 }
             },
+            {
+                path: '',
+                redirectTo: 'list',
+                pathMatch: 'full'
+            }
         ]
     },
     {

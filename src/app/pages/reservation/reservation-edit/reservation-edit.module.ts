@@ -11,6 +11,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
+import {PageHeaderModule} from "../../../components/page-header/page-header.module";
 
 
 
@@ -32,7 +33,8 @@ import {FormsModule} from "@angular/forms";
         NgbDatepickerModule,
         NgbTimepickerModule,
         NgbRatingModule,
-        NgbAlertModule
+        NgbAlertModule,
+        PageHeaderModule
     ]
 })
 export class ReservationEditModule { }

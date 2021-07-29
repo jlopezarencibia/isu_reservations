@@ -1,23 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClientListComponent } from './client-list.component';
+import {ClientListComponent} from './client-list.component';
 import {RouterModule} from "@angular/router";
-import {ClientEditComponent} from "../client-edit/client-edit.component";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {FormsModule} from "@angular/forms";
+import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
+import {PageHeaderModule} from "../../../components/page-header/page-header.module";
 
 
 
 @NgModule({
   declarations: [
-    ClientListComponent
+    ClientListComponent,
   ],
-  imports: [
-    CommonModule,
-      RouterModule.forChild([
-          {
-              path: '',
-              component: ClientListComponent
-          }
-      ])
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild([
+            {
+                path: '',
+                component: ClientListComponent
+            }
+        ]),
+        FontAwesomeModule,
+        FormsModule,
+        NgbPaginationModule,
+        PageHeaderModule
+    ]
 })
 export class ClientListModule { }

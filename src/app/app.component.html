@@ -9,16 +9,41 @@
                     World Class<br>Software Development
                 </div>
             </div>
-            <div class="flex-grow-1 text-right mobile-only" *ngIf="path | async as currentPath">
-                <button class="btn btn-banner" *ngIf="(currentPath == 'create') || (currentPath == 'edit')"
+            <div class="flex-grow-1 text-right mobile-hidden" *ngIf="path | async as currentPath">
+                <button class="btn btn-banner" *ngIf="(currentPath == 'client-list')"
                         routerLink="/reservations">
-                    <span>Reservations List</span>
-                    <fa-icon [icon]="icRight" class="ml-2"></fa-icon>
+                    <fa-icon [icon]="icList" class="mr-2"></fa-icon>
+                    <span>Reservations</span>
                 </button>
-                <button class="btn btn-banner" *ngIf="currentPath == 'list'" routerLink="/clients/create">
-                    <fa-icon [icon]="icLeft" class="mr-2"></fa-icon>
-                    <span>Create Reservation</span>
+                <button class="btn btn-banner mr-3" *ngIf="currentPath == 'reservation-list'" routerLink="/clients/list">
+                    <fa-icon [icon]="icList" class="mr-2"></fa-icon>
+                    <span>Clients</span>
                 </button>
+            </div>
+            <div class="flex-grow-1 text-right mobile-only" *ngIf="path | async as currentPath">
+                <button class="btn btn-banner" *ngIf="(currentPath == 'reservation-edit')"
+                        routerLink="/reservations">
+                    <fa-icon [icon]="icList" class="mr-2"></fa-icon>
+                    <span>Reservations</span>
+
+                </button>
+                <button class="btn btn-banner mr-3" *ngIf="currentPath == 'reservation-list'" routerLink="/clients/list">
+                    <fa-icon [icon]="icList" class="mr-2"></fa-icon>
+                    <span>Clients</span>
+                </button>
+                <button class="btn btn-banner" *ngIf="currentPath == 'reservation-list'" routerLink="/clients/create">
+                    <fa-icon [icon]="icAdd" class="mr-2"></fa-icon>
+                    <span>Create</span>
+                </button>
+                <button class="btn btn-banner mr-3" *ngIf="currentPath == 'client-list'" routerLink="/reservations/list">
+                    <fa-icon [icon]="icList" class="mr-2"></fa-icon>
+                    <span>Reservations</span>
+                </button>
+                <button class="btn btn-banner" *ngIf="currentPath == 'client-list'" routerLink="/clients/create">
+                    <fa-icon [icon]="icAdd" class="mr-2"></fa-icon>
+                    <span>Create</span>
+                </button>
+
             </div>
         </div>
     </div>

@@ -440,4 +440,50 @@ export class ClientControllerService extends BaseService {
     );
   }
 
+  /**
+   * Path part for operation removeById1
+   */
+  static readonly RemoveById1Path = '/api/clients/remove/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeById1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeById1$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<ClientEntity>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ClientControllerService.RemoveById1Path, 'delete');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ClientEntity>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeById1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeById1(params: {
+    id: number;
+  }): Observable<ClientEntity> {
+
+    return this.removeById1$Response(params).pipe(
+      map((r: StrictHttpResponse<ClientEntity>) => r.body as ClientEntity)
+    );
+  }
+
 }

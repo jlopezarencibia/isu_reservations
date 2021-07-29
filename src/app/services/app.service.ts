@@ -9,8 +9,8 @@ import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
 })
 export class AppService {
 
-    constructor() {
-
+    constructor(
+    ) {
     }
 
     path = new BehaviorSubject('');
@@ -56,8 +56,16 @@ export class AppService {
             //         tag: 'h1',
             //     },
             // ],
-            // uploadUrl: 'api/image',
-            // upload: (file: File) => { ... }
+            // uploadUrl: 'http://localhost:8080/api/upload/file',
+            // upload: (file: File) => {
+            //     return this.uploadController.uploadFile({body: {file: file}}).pipe(
+            //         map((input) => {
+            //             console.log(input);
+            //             a: HttpEventType<UploadResponse>
+            //             return HttpEventType.Response
+            //         })
+            //     )
+            // }
             uploadWithCredentials: false,
             sanitize: true,
             toolbarPosition: 'top',
@@ -113,8 +121,8 @@ export class AppService {
     }
 
     getDateTimeInMilis(date: NgbDateStruct, time: NgbTimeStruct): string {
-        console.log(date);
-        console.log(time);
+        // console.log(date);
+        // console.log(time);
         return moment((date.year + '-' + date.month + '-' + date.day + ' ' + time.hour + ':' + time.minute), 'YYYY-MM-DD HH:mm').format('x')
     }
 

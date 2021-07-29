@@ -160,6 +160,52 @@ export class ReservationControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation removeById
+   */
+  static readonly RemoveByIdPath = '/api/reservations/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeById$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<ReservationEntity>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ReservationControllerService.RemoveByIdPath, 'delete');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ReservationEntity>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeById(params: {
+    id: number;
+  }): Observable<ReservationEntity> {
+
+    return this.removeById$Response(params).pipe(
+      map((r: StrictHttpResponse<ReservationEntity>) => r.body as ReservationEntity)
+    );
+  }
+
+  /**
    * Path part for operation update
    */
   static readonly UpdatePath = '/api/reservations/{id}';

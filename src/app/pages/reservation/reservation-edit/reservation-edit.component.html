@@ -1,21 +1,14 @@
-<div class="row m-0 bg-white justify-content-center">
-    <div class="col-11 col-md-9 px-0">
-        <div class="row py-3 mx-0 align-items-stretch">
-            <div class="col-11 col-md-4">
-                <span class="page-title" style="font-weight: lighter;">{{pageTitle}}</span>
-            </div>
-            <div class="col-11 col-md-8 text-muted small">
-                {{pageDescription}}
-            </div>
-        </div>
-    </div>
-</div>
+<app-page-header
+    [pageTitle]="pageTitle"
+    [pageDescription]="pageDescription"
+    [buttonShow]="false">
+</app-page-header>
 
-<div class="row bg-gray justify-content-center p-3">
-    <div *ngIf="pagePath.includes('create')">
-        <div class="col-11 col-md-9 bg-white mb-3 p-2" style="color: var(--text-gray)" *ngIf="owner$ | async as owner">
-            <fa-icon [icon]="icUser" class="mr-3"></fa-icon>
-            {{owner.name}}
+<div class="row mx-0 bg-gray justify-content-center p-3">
+    <div *ngIf="pagePath.includes('create')" class="col-11 col-md-9 bg-white mb-3 p-2" style="color: var(--primary-gray)">
+        <div *ngIf="owner$ | async as owner">
+            <fa-icon [icon]="icUser" class="mx-3"></fa-icon>
+            <span>{{owner.name}}</span>
         </div>
     </div>
     <div class="col-11 col-md-9 bg-white mb-3 p-2">
@@ -82,7 +75,8 @@
         </div>
         <div *ngIf="!(loading$ | async); else creating" class="d-flex align-items-center">
             <button class="btn btn-black btn-sq" (click)="doRemove()"
-                    *ngIf="pagePath.includes('edit')"><fa-icon [icon]="icDelete"></fa-icon>
+                    *ngIf="pagePath.includes('edit')">
+                <fa-icon [icon]="icDelete"></fa-icon>
             </button>
             <div class="d-block flex-grow-1"></div>
             <button class="btn btn-gray btn-sq" routerLink="/reservations"
@@ -91,7 +85,8 @@
             <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('create')"
                     *ngIf="pagePath.includes('create')">Reserve
             </button>
-            <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('edit')" *ngIf="pagePath.includes('edit')">
+            <button class="btn btn-red btn-sq ml-2" (click)="actionStream$.next('edit')"
+                    *ngIf="pagePath.includes('edit')">
                 Save
             </button>
         </div>

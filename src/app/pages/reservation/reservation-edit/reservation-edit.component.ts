@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
     faCalendar,
@@ -11,19 +11,21 @@ import {
 import {AppService} from "../../../services/app.service";
 import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
 import {from, Observable, of, Subject} from "rxjs";
-import {catchError, map, mergeAll, switchMap, tap} from "rxjs/operators";
+import {catchError, map, mapTo, mergeAll, shareReplay, switchMap, tap} from "rxjs/operators";
 import {ActionType} from "../../../app.component";
 import {ReservationEntity} from "../../../api/models/reservation-entity";
 import {ClientEntity} from "../../../api/models/client-entity";
 import {ReservationControllerService} from "../../../api/services/reservation-controller.service";
 import {ClientControllerService} from "../../../api/services/client-controller.service";
+import {AutoUnsubscribe} from "ngx-auto-unsubscribe";
 
+@AutoUnsubscribe()
 @Component({
     selector: 'app-reservation-edit',
     templateUrl: './reservation-edit.component.html',
     styleUrls: ['./reservation-edit.component.css']
 })
-export class ReservationEditComponent implements OnInit {
+export class ReservationEditComponent implements OnInit, OnDestroy {
 
     // PAGE INFO
     pageTitle = '';
@@ -116,6 +118,7 @@ export class ReservationEditComponent implements OnInit {
                             (error: any) => {
                                 console.log('Error in sub: ', error);
                                 this.error = true;
+                                return of(false);
                             })
                         break;
                     }
@@ -144,6 +147,7 @@ export class ReservationEditComponent implements OnInit {
                                 (error: any) => {
                                     console.log('Error in sub: ', error);
                                     this.error = true;
+                                    return of(false)
                                 })
                         break;
                     }
@@ -153,9 +157,10 @@ export class ReservationEditComponent implements OnInit {
                     }
                 }
                 return of(false);
-            })
+            }),
+            shareReplay()
         )
-        this.loading$ = from([actionStream, this.actionStream$.pipe(map((value => !!value)))]).pipe(mergeAll())
+        this.loading$ = from([actionStream, this.actionStream$.pipe(mapTo(false))]).pipe(mergeAll())
         this.owner$ = this.clientController.findById1({id: this.pathId!})
     }
 
@@ -164,6 +169,18 @@ export class ReservationEditComponent implements OnInit {
     }
 
     doRemove = () => {
+        this.reservationController.removeById({id: this.pathId!}).subscribe(
+            result => {
+                console.log('Deleted: ', result);
+                this.router.navigate(['/reservations']);
+            },
+            error => {
+                console.log('Error: ', error);
+            }
+        )
+    }
+
+    ngOnDestroy(): void {
     }
 
 }

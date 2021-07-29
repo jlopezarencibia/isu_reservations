@@ -218,6 +218,35 @@
                     }
                 }
             },
+            "delete": {
+                "tags": [
+                    "reservation-controller"
+                ],
+                "operationId": "removeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservationEntity"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "reservation-controller"
@@ -528,6 +557,37 @@
                     }
                 }
             }
+        },
+        "/api/clients/remove/{id}": {
+            "delete": {
+                "tags": [
+                    "client-controller"
+                ],
+                "operationId": "removeById_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientEntity"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -573,6 +633,7 @@
                         "type": "string"
                     },
                     "reservations": {
+                        "uniqueItems": true,
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/ReservationEntity"
