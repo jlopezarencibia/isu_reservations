@@ -7,6 +7,7 @@ import {ActivatedRoute} from "@angular/router";
 import {AppService} from "../../../services/app.service";
 import {ClientsSortType} from "../../../app.component";
 import {AutoUnsubscribe} from "ngx-auto-unsubscribe";
+import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 
 @AutoUnsubscribe()
 @Component({
@@ -34,6 +35,10 @@ export class ClientListComponent implements OnInit, OnDestroy {
     loading$?: Observable<boolean>;
     count$?: Observable<number>;
 
+    // ICON
+    icAsc = faChevronUp;
+    icDesc = faChevronDown;
+
   constructor(
       private readonly clientController: ClientControllerService,
       private readonly activatedRoute: ActivatedRoute,
@@ -47,7 +52,6 @@ export class ClientListComponent implements OnInit, OnDestroy {
   }
 
     ngOnDestroy(): void {
-        throw new Error('Method not implemented.');
     }
 
   ngOnInit(): void {

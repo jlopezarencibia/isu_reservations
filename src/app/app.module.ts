@@ -3,9 +3,10 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateParserFormatter, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {HttpClientModule} from "@angular/common/http";
+import {CustomDateParserFormatter} from "./services/CustomDateParserFormatter";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,7 @@ import {HttpClientModule} from "@angular/common/http";
         HttpClientModule,
         FontAwesomeModule,
     ],
-    providers: [],
+    providers: [{provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}],
     bootstrap: [AppComponent]
 })
 export class AppModule {

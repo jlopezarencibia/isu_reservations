@@ -5,7 +5,8 @@
 </app-page-header>
 
 <div class="row mx-0 bg-gray justify-content-center p-3">
-    <div *ngIf="pagePath.includes('create')" class="col-11 col-md-9 bg-white mb-3 p-2" style="color: var(--primary-gray)">
+    <div *ngIf="pagePath.includes('create')" class="col-11 col-md-9 bg-white mb-3 p-2"
+         style="color: var(--primary-gray)">
         <div *ngIf="owner$ | async as owner">
             <fa-icon [icon]="icUser" class="mx-3"></fa-icon>
             <span>{{owner.name}}</span>
@@ -13,8 +14,17 @@
     </div>
     <div class="col-11 col-md-9 bg-white mb-3 p-2">
         <div class="row mx-0 align-items-center p-2">
-            <div class="col-12 col-md-6 pl-md-0">
-                <div class="input-group input-control flex-grow-1">
+            <div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+                <div class="d-block input-image">
+                    <img [src]="displayImage" style="width: 100%; height: 100%; object-fit: cover">
+                    <input id="imageInput" type="file" class="d-none">
+                    <label for="imageInput" class="m-0 input-overlay d-flex align-items-center justify-content-center">
+                        <fa-icon [icon]="icUpload"></fa-icon>
+                    </label>
+                </div>
+            </div>
+            <div class="col-12 col-md-5">
+                <div class="input-group input-control flex-grow-1 mb-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
                             <fa-icon [icon]="icLocation"></fa-icon>
@@ -23,46 +33,39 @@
                     <input type="text" class="form-control input-control" placeholder="Location name"
                            [(ngModel)]="inputLocationName">
                 </div>
-                <div class="row mx-0 my-3 justify-content-between">
-                    <div class="col-12 col-md-6 px-0 mb-3 mb-md-0">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-calendar" (click)="d.toggle()"
-                                        type="button">
-                                    <fa-icon [icon]="icCalendar"></fa-icon>
-                                </button>
-                            </div>
-                            <input class="form-control input-calendar" placeholder="yyyy-mm-dd"
-                                   name="dp" [(ngModel)]="inputDate" ngbDatepicker #d="ngbDatepicker">
-                        </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-calendar" (click)="d.toggle()"
+                                type="button">
+                            <fa-icon [icon]="icCalendar"></fa-icon>
+                        </button>
                     </div>
-                    <div class="col-12 col-md-6 px-0 d-flex justify-content-center">
-                        <ngb-timepicker [(ngModel)]="inputTime" [meridian]="true" [spinners]="false"></ngb-timepicker>
-                    </div>
+                    <input class="form-control input-calendar" placeholder="Date"
+                           name="dp" [(ngModel)]="inputDate" [minDate]="today" ngbDatepicker #d="ngbDatepicker">
+                </div>
+                <div>
+                    <ngb-timepicker [(ngModel)]="inputTime" [meridian]="true" [spinners]="false"></ngb-timepicker>
                 </div>
             </div>
-            <div class="col-12 col-md-6 pr-md-0">
-                <div class="row mx-0 my-3 justify-content-center">
-                    <div class="col-12 col-md-6 px-0 mb3 mb-md-0 d-flex align-items-center">
-                        <div>Ranking:</div>
-                        <div>
-                            <ngb-rating [max]="5" [rate]="inputRanking" [(ngModel)]="inputRanking" class="ml-3">
-                                <ng-template let-fill="fill" let-index="index">
-                                    <span class="star-bg" [class.star-filled]="fill === 100">&#9733;</span>
-                                </ng-template>
-                            </ngb-rating>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 px-0 mb3 mb-md-0">
-                        <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" [(ngModel)]="inputFavorite">
-                            <label class="form-check-label">
-                                Favorite
-                            </label>
-                        </div>
+            <div class="col-12 col-md-4">
+                <div class="px-0 mb3 mb-md-0 d-flex align-items-center">
+                    <div>Ranking:</div>
+                    <div>
+                        <ngb-rating [max]="5" [rate]="inputRanking" [(ngModel)]="inputRanking" class="ml-3">
+                            <ng-template let-fill="fill" let-index="index">
+                                <span class="star-bg" [class.star-filled]="fill === 100">&#9733;</span>
+                            </ng-template>
+                        </ngb-rating>
                     </div>
                 </div>
-
+                <div class="px-0 mb3 mb-md-0">
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="inputFavorite">
+                        <label class="form-check-label">
+                            Favorite
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -93,7 +96,7 @@
         <ng-template #creating>
             <ngb-alert class="text-center" [dismissible]="false" [type]="'primary'">
                 <fa-icon [icon]="icSpinner" [spin]="true" class="mr-3"></fa-icon>
-                Creating...
+                Creating reservation...
             </ngb-alert>
         </ng-template>
     </div>

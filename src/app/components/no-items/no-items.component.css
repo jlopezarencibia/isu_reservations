@@ -1,0 +1,7 @@
+.no-items {
+    min-height: 200px;
+    min-width: 300px;
+    color: var(--primary-gray);
+    border: 1px dashed #00000022;
+    background-color: #00000005
+}

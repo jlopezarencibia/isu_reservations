@@ -7,6 +7,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {PipesModule} from "../../../pipes/pipes.module";
 import {FormsModule} from "@angular/forms";
 import {PageHeaderModule} from "../../../components/page-header/page-header.module";
+import {NoItemsModule} from "../../../components/no-items/no-items.module";
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {PageHeaderModule} from "../../../components/page-header/page-header.modu
         NgbRatingModule,
         FormsModule,
         PageHeaderModule,
+        NoItemsModule,
     ]
 })
 export class ReservationListModule {

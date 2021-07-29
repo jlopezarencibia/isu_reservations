@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
     faCalendar,
@@ -6,10 +6,11 @@ import {
     faMapPin,
     faSpinner,
     faTrashAlt,
+    faUpload,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
 import {AppService} from "../../../services/app.service";
-import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCalendar, NgbDate, NgbDateAdapter, NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
 import {from, Observable, of, Subject} from "rxjs";
 import {catchError, map, mapTo, mergeAll, shareReplay, switchMap, tap} from "rxjs/operators";
 import {ActionType} from "../../../app.component";
@@ -18,6 +19,7 @@ import {ClientEntity} from "../../../api/models/client-entity";
 import {ReservationControllerService} from "../../../api/services/reservation-controller.service";
 import {ClientControllerService} from "../../../api/services/client-controller.service";
 import {AutoUnsubscribe} from "ngx-auto-unsubscribe";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @AutoUnsubscribe()
 @Component({
@@ -45,6 +47,7 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
     icError = faExclamationCircle;
     icSpinner = faSpinner;
     icDelete = faTrashAlt;
+    icUpload = faUpload;
 
     // INPUTS
     inputLocationName = ''
@@ -52,25 +55,45 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
     inputTime: NgbTimeStruct = {hour: 12, minute: 0, second: 0}
     inputRanking = 0;
     inputFavorite = false;
+    displayImage = '';
 
     // FLAGS
     error = false;
+    today: NgbDateStruct;
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
         private readonly appService: AppService,
         private readonly clientController: ClientControllerService,
         private readonly reservationController: ReservationControllerService,
-        private readonly router: Router
+        private readonly router: Router,
+        private readonly sanitizer: DomSanitizer,
+        private ngbCalendar: NgbCalendar,
     ) {
         this.pageTitle = activatedRoute.snapshot.data.name;
         this.pageDescription = activatedRoute.snapshot.data.description;
         this.pagePath = activatedRoute.snapshot.data.path;
         this.appService.setPath(this.pagePath)
         this.pathId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
+        this.today = ngbCalendar.getToday();
     }
 
     ngOnInit(): void {
+        this.inputDate = this.today;
+        const inputImage = document.getElementById('imageInput')!;
+        inputImage.addEventListener("change", (evt: any) => {
+            if (evt.target.files && evt.target.files[0]) {
+                const src: File = evt.target.files[0]
+                const filerReader = new FileReader();
+                filerReader.readAsDataURL(src);
+                console.log(src);
+                filerReader.addEventListener("load", (fn) => {
+                    if (fn.target && fn.target.result) {
+                        this.displayImage = this.sanitizer.sanitize(SecurityContext.URL, fn.target.result.toString())!;
+                    }
+                })
+            }
+        })
         if (this.pagePath.includes('edit')) {
             this.reservationController.findById({id: this.pathId!}).subscribe(
                 result => {
@@ -78,7 +101,8 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                     this.inputDate = this.appService.getNgbDate(result.date!);
                     this.inputTime = this.appService.getNgbTime(result.date!);
                     this.inputRanking = result.ranking!;
-                    this.inputFavorite = result.favorite!
+                    this.inputFavorite = result.favorite!;
+                    this.displayImage = result.image!;
                 }
             )
         }
@@ -102,7 +126,8 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                                 location: this.inputLocationName,
                                 date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime),
                                 favorite: this.inputFavorite,
-                                ranking: this.inputRanking
+                                ranking: this.inputRanking,
+                                image: this.displayImage
                             }
                         }).pipe(
                             catchError((err, caught) => {
@@ -129,7 +154,8 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                                 location: this.inputLocationName!,
                                 date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime!),
                                 favorite: this.inputFavorite!,
-                                ranking: this.inputRanking!
+                                ranking: this.inputRanking!,
+                                image: this.displayImage
                             }
                         }).pipe(
                             tap(val => console.log(val)),
@@ -182,5 +208,4 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
     }
-
 }

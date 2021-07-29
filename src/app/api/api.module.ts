@@ -4,7 +4,6 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { FileUploadControllerService } from './services/file-upload-controller.service';
 import { ReservationControllerService } from './services/reservation-controller.service';
 import { ClientControllerService } from './services/client-controller.service';
 
@@ -16,7 +15,6 @@ import { ClientControllerService } from './services/client-controller.service';
   exports: [],
   declarations: [],
   providers: [
-    FileUploadControllerService,
     ReservationControllerService,
     ClientControllerService,
     ApiConfiguration

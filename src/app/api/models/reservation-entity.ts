@@ -6,6 +6,7 @@ export interface ReservationEntity {
   date?: string;
   favorite?: boolean;
   id?: number;
+  image?: string;
   location?: string;
   ranking?: number;
 }

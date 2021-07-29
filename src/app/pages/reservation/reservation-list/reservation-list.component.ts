@@ -8,6 +8,13 @@ import {ReservationEntity} from "../../../api/models/reservation-entity";
 import {ReservationControllerService} from "../../../api/services/reservation-controller.service";
 import {ReservationsSortType} from "../../../app.component";
 import {AutoUnsubscribe} from "ngx-auto-unsubscribe";
+import {
+    faSortAlphaDown,
+    faSortAlphaDownAlt,
+    faSortAlphaUp, faSortAmountDown,
+    faSortDown, faSortNumericDownAlt, faSortNumericUp,
+    faSortUp
+} from "@fortawesome/free-solid-svg-icons";
 
 @AutoUnsubscribe()
 @Component({
@@ -90,26 +97,31 @@ export class ReservationListComponent implements OnInit, OnDestroy {
             case ReservationsSortType.DATE_ASC: {
                 this.sortBy = 'date';
                 this.sortDirection = 'ASC';
+                this.icSort = faSortNumericUp;
                 break;
             }
             case ReservationsSortType.DATE_DESC: {
                 this.sortBy = 'date';
                 this.sortDirection = 'DESC';
+                this.icSort = faSortNumericDownAlt;
                 break;
             }
             case ReservationsSortType.ALPH_ASC: {
                 this.sortBy = 'location';
                 this.sortDirection = 'ASC';
+                this.icSort = faSortAlphaUp;
                 break;
             }
             case ReservationsSortType.ALPH_DESC: {
                 this.sortBy = 'location';
                 this.sortDirection = 'DESC';
+                this.icSort = faSortAlphaDownAlt;
                 break;
             }
             case ReservationsSortType.RANK: {
                 this.sortBy = 'ranking';
                 this.sortDirection = 'DESC';
+                this.icSort = faSortAmountDown;
                 break;
             }
         }

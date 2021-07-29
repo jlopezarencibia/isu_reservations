@@ -6,6 +6,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {PageHeaderModule} from "../../../components/page-header/page-header.module";
+import {NoItemsModule} from "../../../components/no-items/no-items.module";
 
 
 
@@ -24,7 +25,8 @@ import {PageHeaderModule} from "../../../components/page-header/page-header.modu
         FontAwesomeModule,
         FormsModule,
         NgbPaginationModule,
-        PageHeaderModule
+        PageHeaderModule,
+        NoItemsModule
     ]
 })
 export class ClientListModule { }

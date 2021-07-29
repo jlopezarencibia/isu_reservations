@@ -26,7 +26,7 @@
                            [class.is-invalid]="nameSearchFailed" [(ngModel)]="inputName" [ngbTypeahead]="findContact"
                            [resultTemplate]="rt" [inputFormatter]="formatter" (selectItem)="setData($event.item)"
                            *ngIf="pagePath.includes('create')"
-                           placeholder="Contact name ..."/>
+                           placeholder="Contact name"/>
                 </div>
             </div>
             <div class="col-12 col-md-3 p-1" style="height: 40px">
@@ -67,8 +67,8 @@
                                 <fa-icon [icon]="icDate"></fa-icon>
                             </button>
                         </div>
-                        <input [disabled]="formDisabled" class="form-control input-calendar" placeholder="yyyy-mm-dd"
-                               name="dp" [(ngModel)]="inputDate" ngbDatepicker #d="ngbDatepicker">
+                        <input [disabled]="formDisabled" class="form-control input-calendar" placeholder="Birth date"
+                               name="dp" [(ngModel)]="inputDate" ngbDatepicker #d="ngbDatepicker" [maxDate]="today">
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {AppService} from "../../../services/app.service";
 import {AngularEditorConfig} from "@kolkov/angular-editor";
-import {NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCalendar, NgbDate, NgbDateAdapter, NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
 import {ActionType} from "../../../app.component";
 import {ClientEntity} from "../../../api/models/client-entity";
 import {ClientControllerService} from "../../../api/services/client-controller.service";
@@ -64,11 +64,15 @@ export class ClientEditComponent implements OnInit, OnDestroy {
 
     selectedClient?: ClientEntity;
 
+    today: NgbDateStruct;
+
     constructor(
         private readonly activatedRoute: ActivatedRoute,
         private readonly clientController: ClientControllerService,
         private readonly appService: AppService,
         private readonly router: Router,
+        private readonly calendar: NgbCalendar
+
     ) {
         this.pageTitle = activatedRoute.snapshot.data.name;
         this.pageDescription = activatedRoute.snapshot.data.description;
@@ -76,6 +80,7 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         this.appService.setPath(this.pagePath);
         this.editorConfig = appService.getEditorConfig();
         this.pathId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!) ?? -1;
+        this.today = calendar.getToday();
     }
 
     ngOnDestroy(): void {
@@ -221,6 +226,8 @@ export class ClientEditComponent implements OnInit, OnDestroy {
 
     formatter = (c: { name: string }) => c.name;
 
+
+
     resetForm(): void {
         this.inputName = '';
         this.inputType = '';
@@ -243,4 +250,5 @@ export class ClientEditComponent implements OnInit, OnDestroy {
             }
         )
     }
+
 }

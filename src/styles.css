@@ -274,6 +274,10 @@ button.dropdown-item:hover {
     vertical-align: middle !important;
 }
 
+.horizontal-center {
+    horiz-align: center;
+}
+
 .pointer {
     cursor: pointer;
 }
@@ -284,4 +288,36 @@ button.dropdown-item:hover {
 .page-item.active .page-link {
     background-color: var(--primary-gray);
     border-color: var(--primary-gray);
+}
+
+.input-image {
+    height: 140px;
+    width: 140px;
+    border: 1px solid var(--primary-gray);
+    position: relative;
+}
+
+.input-overlay {
+    transition: .2s;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35px;
+    background-color: #00000022;
+    color: white;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+}
+
+.input-overlay:hover {
+    transition: .2s;
+    background-color: #00000044;
+}
+
+.input-overlay:active {
+    transition: .2s;
+    background-color: #00000066;
 }
