@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {faCaretLeft, faCaretRight, faList, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faList, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {ActivatedRoute} from "@angular/router";
 import {AppService} from "./services/app.service";
 import {Observable} from "rxjs";
@@ -12,8 +12,6 @@ import {Observable} from "rxjs";
 export class AppComponent {
 
     // ICONS
-    icRight = faCaretRight;
-    icLeft = faCaretLeft;
     icAdd = faPlus;
     icList = faList;
 
@@ -34,7 +32,6 @@ export enum ActionType {
 }
 
 export enum ReservationsSortType {
-    DEFAULT = 'default',
     DATE_ASC = 'date_asc',
     DATE_DESC = 'date_desc',
     ALPH_ASC = 'alph_asc',

@@ -9,16 +9,23 @@ import {NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
 })
 export class AppService {
 
-    constructor(
-    ) {
+    constructor() {
     }
 
     path = new BehaviorSubject('');
 
+    /**
+     * Sets the current path
+     *
+     * @param pathSegment the path segment
+     * */
     setPath(pathSegment: string) {
         this.path.next(pathSegment);
     }
 
+    /**
+     * Set the RTF Editor configuration
+     * */
     getEditorConfig(): AngularEditorConfig {
         return {
             editable: true,
@@ -108,26 +115,52 @@ export class AppService {
         }
     }
 
-    getNgbDate(dateInMilis: string) {
-        const date = moment(dateInMilis, 'x');
+    /**
+     * Convert the date in milliseconds to <code>NgbDateStruct</code>
+     *
+     * @param dateInMillis the date in millis
+     * @return NgbDateStruct - the date
+     * */
+    getNgbDate(dateInMillis: string) {
+        const date = moment(dateInMillis, 'x');
         const year: number = parseInt(date.format('YYYY'));
         const month: number = parseInt(date.format('MM'));
         const day: number = parseInt(date.format('DD'));
         return {year, month, day};
     }
 
+    /**
+     * Convert the <code>NgbDateStruct</code> date into milliseconds
+     *
+     * @param ngbDate the <code>NgbDateStruct</code> date
+     * @return string -the date in milliseconds
+     * */
     getDateInMilis(ngbDate: NgbDateStruct): string {
         return moment((ngbDate.year + '-' + ngbDate.month + '-' + ngbDate.day), 'YYYY-MM-DD').format('x');
     }
 
-    getDateTimeInMilis(date: NgbDateStruct, time: NgbTimeStruct): string {
+    /**
+     * Convert the <code>NgbDateStruct</code> date and the <code>NgbTimeStruct</code> time into milliseconds
+     *
+     * @param date the <code>NgbDateStruct</code> date
+     * @param time the <code>NgbTimeStruct</code> time
+     * @return string -the date in milliseconds
+     * */
+    getDateTimeInMillis(date: NgbDateStruct, time: NgbTimeStruct): string {
         // console.log(date);
         // console.log(time);
         return moment((date.year + '-' + date.month + '-' + date.day + ' ' + time.hour + ':' + time.minute), 'YYYY-MM-DD HH:mm').format('x')
     }
 
-    getNgbTime(dateInMilis: string): NgbTimeStruct {
-        const date = moment(dateInMilis, 'x');
+
+    /**
+     * Convert the date in milliseconds to <code>NgbTimeStruct</code>
+     *
+     * @param dateInMillis the date in millis
+     * @return NgbTimeStruct - the time
+     * */
+    getNgbTime(dateInMillis: string): NgbTimeStruct {
+        const date = moment(dateInMillis, 'x');
         const hour = parseInt(date.format('HH'));
         const minute = parseInt(date.format('mm'));
         const second = 0;

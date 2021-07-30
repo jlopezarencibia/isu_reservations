@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {AppService} from "../../../services/app.service";
 import {AngularEditorConfig} from "@kolkov/angular-editor";
-import {NgbCalendar, NgbDate, NgbDateAdapter, NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCalendar, NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
 import {ActionType} from "../../../app.component";
 import {ClientEntity} from "../../../api/models/client-entity";
 import {ClientControllerService} from "../../../api/services/client-controller.service";
@@ -38,7 +38,6 @@ export class ClientEditComponent implements OnInit, OnDestroy {
     pagePath = '';
     pathId?: number;
 
-
     // ICONS
     icName = faUser;
     icType = faGlobe;
@@ -50,8 +49,9 @@ export class ClientEditComponent implements OnInit, OnDestroy {
 
     // FLAGS
     error = false;
-    nameSearchFailed = false;
     formDisabled = false;
+    selectedClient?: ClientEntity;
+    today: NgbDateStruct;
 
     // CONFIG
     editorConfig: AngularEditorConfig;
@@ -62,10 +62,6 @@ export class ClientEditComponent implements OnInit, OnDestroy {
     inputPhone = '';
     inputDescription = '';
     inputDate?: NgbDateStruct;
-
-    selectedClient?: ClientEntity;
-
-    today: NgbDateStruct;
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
@@ -84,21 +80,15 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         this.today = calendar.getToday();
     }
 
-    ngOnDestroy(): void {
-    }
-
     ngOnInit(): void {
         if (this.pagePath.includes('edit')) {
             this.clientController.findById1({id: this.pathId!}).subscribe(
                 result => {
-                    // console.log(result)
-                    // console.log(this.inputName);
                     this.inputName = result.name!;
                     this.inputDate = this.appService.getNgbDate(result.birthDate!);
                     this.inputPhone = result.phone!;
                     this.inputType = result.type!
                     this.inputDescription = result.description!;
-                    // console.log(this.inputName);
                 }
             )
         }
@@ -111,7 +101,6 @@ export class ClientEditComponent implements OnInit, OnDestroy {
                 }
             }),
             switchMap((action) => {
-                // console.log(action)
                 switch (action) {
                     case ActionType.CREATE : {
                         if (this.selectedClient) {
@@ -132,7 +121,6 @@ export class ClientEditComponent implements OnInit, OnDestroy {
                                     return caught;
                                 })
                             ).subscribe((result: ClientEntity) => {
-                                    // console.log('Created: ', result);
                                     this.router.navigate(['/reservations', 'create', result.id]).then();
                                 },
                                 (error: any) => {
@@ -158,8 +146,7 @@ export class ClientEditComponent implements OnInit, OnDestroy {
                                 this.error = true;
                                 return caught;
                             })
-                        ).subscribe((/*result: ClientEntity*/) => {
-                                // console.log('Updated: ', result);
+                        ).subscribe(() => {
                                 this.router.navigate(['/reservations']).then();
                             },
                             (error: any) => {
@@ -179,26 +166,24 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         this.loading$ = from([actionStream, this.actionStream$.pipe(mapTo(false))]).pipe(mergeAll());
     }
 
+    /**
+     * Checks the form validation
+     *
+     * @return <b>true</b> - if the form is valid
+     * */
     checkForm(): boolean {
-        // console.log('Checking form...');
-        // console.log('name: ', this.inputName);
-        // console.log('type: ', this.inputType);
-        // console.log('phone: ', this.inputPhone);
-        // console.log('description: ', this.inputDescription);
-        // console.log('date: ', this.inputDate);
-        // console.log(moment(this.inputDate?.day+'/'+this.inputDate?.month+'/'+this.inputDate?.year, 'D/M/YYYY'))
-        // const result = (this.selectedClient ? ((this.inputName as ClientEntity).name!.length > 0) : this.inputName.length > 0) && this.inputType.length > 0 && !!this.inputDate;
-        // console.log('Form is valid: ', result)
-        // return result;
-
         return (this.selectedClient ? ((this.inputName as ClientEntity).name!.length > 0) : this.inputName.length > 0)
             && this.inputType.length > 0
             && moment(this.inputDate?.day + '/' + this.inputDate?.month + '/' + this.inputDate?.year, 'D/M/YYYY').isValid();
     }
 
+    /**
+     * Sets the information of the selected Client to the inputs and disables edition
+     *
+     * @param incoming - the Client information
+     * */
     setData(incoming: ClientEntity) {
         this.selectedClient = incoming;
-        // console.log(incoming)
         this.inputDate = this.appService.getNgbDate(this.selectedClient.birthDate!);
         this.inputPhone = this.selectedClient.phone!;
         this.inputType = this.selectedClient.type!;
@@ -207,6 +192,12 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         this.error = false;
     }
 
+    /**
+     * Search the Clients that matches with the written in the input
+     *
+     * @param text$ - the Term to search
+     * @return ClientEntity[] List of possible Clients that matches the term
+     * */
     findContact: OperatorFunction<string, readonly ClientEntity[]> = (text$: Observable<string>) => {
         if (this.pagePath.includes('create')) {
             return text$.pipe(
@@ -227,10 +218,17 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         }
     };
 
+    /**
+     * Formats th result to only show the name
+     *
+     * @param c - the Client
+     * @return string the Client name
+     * */
     formatter = (c: { name: string }) => c.name;
 
-
-
+    /**
+     * Resets the form in case of locked when a Client has been selected from search
+     * */
     resetForm(): void {
         this.inputName = '';
         this.inputType = '';
@@ -242,6 +240,9 @@ export class ClientEditComponent implements OnInit, OnDestroy {
         this.error = false;
     }
 
+    /**
+     * Deletes the Client
+     * */
     doRemove = () => {
         this.clientController.removeById1({id: this.pathId!}).subscribe(
             result => {
@@ -252,6 +253,12 @@ export class ClientEditComponent implements OnInit, OnDestroy {
                 console.log('Error: ', error);
             }
         )
+    }
+
+    /**
+     * Required for <code>@AutoUnsubscribe()</code> to work properly
+     * */
+    ngOnDestroy(): void {
     }
 
 }

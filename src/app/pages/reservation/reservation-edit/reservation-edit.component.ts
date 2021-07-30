@@ -10,7 +10,7 @@ import {
     faUser
 } from "@fortawesome/free-solid-svg-icons";
 import {AppService} from "../../../services/app.service";
-import {NgbCalendar, NgbDate, NgbDateAdapter, NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCalendar, NgbDateStruct, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
 import {from, Observable, of, Subject} from "rxjs";
 import {catchError, map, mapTo, mergeAll, shareReplay, switchMap, tap} from "rxjs/operators";
 import {ActionType} from "../../../app.component";
@@ -125,7 +125,7 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                         this.clientController.reserve({
                             id: this.pathId!, body: {
                                 location: this.inputLocationName,
-                                date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime),
+                                date: this.appService.getDateTimeInMillis(this.inputDate!, this.inputTime),
                                 favorite: this.inputFavorite,
                                 ranking: this.inputRanking,
                                 image: this.displayImage
@@ -139,7 +139,7 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                         ).subscribe(
                             (result: ReservationEntity) => {
                                 console.log('Created: ', result);
-                                this.router.navigate(['/reservations']);
+                                this.router.navigate(['/reservations']).then();
                             },
                             (error: any) => {
                                 console.log('Error in sub: ', error);
@@ -153,7 +153,7 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                         this.reservationController.update({
                             id: this.pathId!, body: {
                                 location: this.inputLocationName!,
-                                date: this.appService.getDateTimeInMilis(this.inputDate!, this.inputTime!),
+                                date: this.appService.getDateTimeInMillis(this.inputDate!, this.inputTime!),
                                 favorite: this.inputFavorite!,
                                 ranking: this.inputRanking!,
                                 image: this.displayImage
@@ -169,7 +169,7 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
                             .subscribe(
                                 (result: ReservationEntity) => {
                                     console.log('Created: ', result);
-                                    this.router.navigate(['/reservations']);
+                                    this.router.navigate(['/reservations']).then();
                                 },
                                 (error: any) => {
                                     console.log('Error in sub: ', error);
@@ -191,17 +191,25 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
         this.owner$ = this.clientController.findById1({id: this.pathId!})
     }
 
+    /**
+     * Checks the form validation
+     *
+     * @return <b>true</b> - if the form is valid
+     * */
     checkForm(): boolean {
         return (
             this.inputLocationName.length > 0 &&
             moment(this.inputDate?.day + '/' + this.inputDate?.month + '/' + this.inputDate?.year, 'D/M/YYYY').isValid())
     }
 
+    /**
+     * Deletes the reservation
+     * */
     doRemove = () => {
         this.reservationController.removeById({id: this.pathId!}).subscribe(
             result => {
                 console.log('Deleted: ', result);
-                this.router.navigate(['/reservations']);
+                this.router.navigate(['/reservations']).then();
             },
             error => {
                 console.log('Error: ', error);
@@ -209,6 +217,9 @@ export class ReservationEditComponent implements OnInit, OnDestroy {
         )
     }
 
+    /**
+     * Required for <code>@AutoUnsubscribe()</code> to work properly
+     * */
     ngOnDestroy(): void {
     }
 }
